@@ -1,0 +1,175 @@
+---
+description: TypeScript coding standards and best practices for vanilla TypeScript web development
+globs: **/*.ts, **/*.tsx, **/*.d.ts
+---
+
+# TypeScript Best Practices
+
+## Type System
+
+- Prefer interfaces over types for object definitions
+- Use type for unions, intersections, and mapped types
+- Avoid using `any`, prefer `unknown` for unknown types
+- Use strict TypeScript configuration (enabled in tsconfig.json)
+- Leverage TypeScript's built-in utility types (`Omit`, `Record`, `Pick`, `Partial`, etc.)
+- Use generics for reusable type patterns
+- Define interfaces for data structures (e.g., `Product`, `Cart`, `CatalogData`)
+
+## Naming Conventions
+
+- Use PascalCase for type names and interfaces (e.g., `Product`, `Cart`, `RGB`)
+- Use camelCase for variables and functions (e.g., `getCartItemsCount`, `renderCatalogPage`)
+- Use UPPER_CASE for constants (e.g., `MAX_ITEMS`)
+- Use descriptive names with auxiliary verbs (e.g., `isLoading`, `hasError`)
+- Use descriptive function names that indicate their purpose (e.g., `setupPageAfterRender`, `addAccessibilityControls`)
+
+## Code Organization
+
+- Keep type definitions close to where they're used
+- Export interfaces and types when they are shared across modules
+- Place module-specific types near the top of the file
+- Use explicit exports for functions and interfaces that are used in other modules
+- Organize code by functionality within modules (DOM manipulation, data fetching, event handlers)
+
+## Functions
+
+- Use explicit return types for exported/public functions (e.g., `export function renderCatalogPage(): Promise<void>`)
+- Use arrow functions for callbacks and event handlers
+- Prefer async/await over Promises for asynchronous operations
+- Use void return type for functions that don't return values
+- Handle errors with try-catch blocks in async functions
+- Validate function parameters and handle edge cases
+
+## DOM Manipulation
+
+- Use proper TypeScript types for DOM elements (`HTMLElement`, `HTMLInputElement`, `HTMLButtonElement`, etc.)
+- Use type assertions when necessary for DOM queries (e.g., `document.getElementById('root') as HTMLElement`)
+- Always check for null/undefined before using DOM elements (e.g., `if (!root) return;`)
+- Use `querySelector` and `querySelectorAll` with proper type assertions
+- Use `addEventListener` with properly typed event handlers
+- Prefer `getElementById` over `querySelector` when possible for better type inference
+- Use `dataset` properties for data attributes with proper typing
+
+## Global Type Declarations
+
+- Use `declare global` to extend global interfaces (e.g., `Window` interface)
+- Define global function types when functions are attached to window object
+- Use module augmentation for extending third-party types
+
+## Async Operations and Data Fetching
+
+- Use async/await for fetch operations
+- Always handle fetch errors with try-catch blocks
+- Validate JSON parsing with error handling
+- Check response.ok before processing fetch responses
+- Provide meaningful error messages for failed operations
+- Use proper typing for API responses (e.g., `CatalogData`, `ProductData[]`)
+
+## Local Storage and Cookies
+
+- Create typed interfaces for data stored in localStorage
+- Use try-catch blocks when parsing JSON from localStorage
+- Provide default values when localStorage data is missing or invalid
+- Use helper functions for localStorage operations (e.g., `getCart()`, `saveCart()`)
+- Validate data structure after parsing from localStorage
+- Use typed cookie helper functions with proper parameter types
+
+## Error Handling
+
+- Use try-catch blocks with typed catch clauses
+- Handle Promise rejections properly in async functions
+- Provide user-friendly error messages
+- Log errors to console for debugging
+- Validate data before processing (e.g., check for null, undefined, or invalid structure)
+- Use early returns for error conditions
+
+## Type Guards and Validation
+
+- Use type guards for runtime type checking when needed
+- Validate external data (JSON, API responses) before using
+- Check for required properties before accessing nested objects
+- Use optional chaining (`?.`) and nullish coalescing (`??`) for safe property access
+- Validate array structures before iterating
+
+## Best Practices
+
+- Enable strict mode in tsconfig.json (already enabled)
+- Use readonly for immutable properties when appropriate
+- Implement proper null checking before DOM manipulation
+- Use type assertions sparingly and only when necessary
+- Prefer type narrowing over type assertions
+- Use const assertions for literal types when appropriate
+- Avoid using `any` - use `unknown` and type guards instead
+
+## Module Patterns
+
+- Export functions and interfaces that are used in other modules
+- Use named exports for clarity
+- Keep modules focused on a single responsibility
+- Import only what is needed from other modules
+- Use relative imports for local modules (e.g., `import { renderCatalogPage } from './catalog'`)
+
+## Code Examples from Project
+
+### Interface Definition
+
+```typescript
+interface Product {
+  id: string;
+  name: string;
+  manufacturer: string;
+  price: number;
+  quantity: number;
+}
+```
+
+### DOM Manipulation with Type Safety
+
+```typescript
+const root = document.getElementById('root');
+if (!root) return;
+root.innerHTML = content;
+```
+
+### Async Function with Error Handling
+
+```typescript
+async function loadProductsFromJson(): Promise<ProductData[]> {
+  try {
+    const response = await fetch('/catalog.json');
+    if (!response.ok) {
+      throw new Error(`Failed to load catalog: ${response.status}`);
+    }
+    const data: CatalogData = await response.json();
+    return data.products;
+  } catch (error) {
+    console.error('Error loading catalog:', error);
+    return [];
+  }
+}
+```
+
+### Type Assertion for DOM Elements
+
+```typescript
+const searchInput = document.getElementById('catalog-search') as HTMLInputElement;
+if (!searchInput) return;
+```
+
+### Utility Types Usage
+
+```typescript
+export function addToCart(product: Omit<Product, 'quantity'>, quantity: number = 1): void {
+  // Implementation
+}
+```
+
+### Global Type Declaration
+
+```typescript
+declare global {
+  interface Window {
+    addToCartAndUpdate: (name: string, manufacturer: string, price: number) => void;
+  }
+}
+```

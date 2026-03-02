@@ -1,0 +1,17 @@
+{
+  "name": "Аптека Дарниця",
+  "short_name": "Аптека",
+  "description": "Каталог та замовлення ліків в аптеці Дарниця",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#009639",
+  "icons": [
+    {
+      "src": "/darnitsa-logo.svg", 
+      "sizes": "any", 
+      "type": "image/svg+xml",
+      "purpose": "any maskable" 
+    }
+  ]
+} 
